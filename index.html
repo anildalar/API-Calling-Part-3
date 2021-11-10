@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    </head>
+    <body>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">An item</li>
+                        <li class="list-group-item">A second item</li>
+                        <li class="list-group-item">A third item</li>
+                        <li class="list-group-item">A fourth item</li>
+                        <li class="list-group-item">And a fifth one</li>
+                      </ul>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        <button class="btn btn-success">Get Some Data</button>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">User Id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Body</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+
+
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script>
+
+            //XHMLHttpRequest Class
+            //Lets create a user Defined custom class
+            class MyClass{//Naming Case must be PascalCase
+                //1. Property
+                
+                //2. constructor
+                constructor(){
+                    console.log('Constructor');
+                    this.xhr =  new XMLHttpRequest();
+                    //console.log(this.xhr);
+                }
+                
+                //3. Method
+
+                getData(mobj){
+                    console.log(typeof mobj);
+                    console.log(mobj);
+                    console.log(mobj.method);
+                    console.log(mobj.url);
+
+                    this.xhr.open(mobj.method,mobj.url);
+                    this.xhr.send();
+                    this.xhr.onload = function(){
+                        
+                        console.log('onload ',this.xhr);
+                    } 
+                  
+                }
+
+
+            }
+
+            //2. Lets create the object of the class
+            //let object = new ClassName();
+
+            let myobject = new MyClass();
+            //When we create an object the constructor of the class is called
+
+
+            function getData(myobj,callback){
+                let xhr = new XMLHttpRequest();
+
+                xhr.open(myobj.method,myobj.url);
+                xhr.send();
+                xhr.onload = function(){
+                    //console.log(xhr);
+                    //return xhr.responseText;
+                    callback(xhr.responseText);
+                }
+            }
+
+           
+
+            //element.addEventListener(event, function, useCapture)
+            document.querySelector('button.btn.btn-success').addEventListener('click',function(){
+                //alert('Its working 2');
+                getData({ 
+                            url:"https://jsonplaceholder.typicode.com/posts",
+                            method:'GET'
+                        },function(result){
+                            console.log(result);
+
+
+                            result = JSON.parse(result);
+
+                            console.log(typeof result);
+
+                            
+                            var tr = '';
+
+
+                            result.forEach(element => {
+                                console.log(element);
+                                tr += `<tr>
+                                            <th scope="row">`+element.id+`</th>
+                                            <td>`+element.userId+`</td>
+                                            <td>`+element.title+`</td>
+                                            <td>`+element.body+`</td>
+                                            <td>
+                                                <button class="btn btn-success btn-sm a_view"  data-bs-toggle="modal" data-bs-target="#exampleModal">View</button>    
+                                                <button class="btn btn-primary btn-sm">Edit</button>    
+                                                <button class="btn btn-danger btn-sm">Delete</button>    
+                                            </td>
+                                        </tr>`;
+                            });
+                            console.log(tr);
+
+                            document.querySelector('table > tbody').innerHTML = tr;
+                        });
+                //console.log(typeof result);
+
+
+            
+
+                
+
+            })
+
+
+            document.querySelector('.a_view').addEventListener('click',function(){
+                alert('OKOKKOK');
+            });
+
+            document
+        </script>
+    </body>
+</html>
